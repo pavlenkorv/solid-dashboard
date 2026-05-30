@@ -398,6 +398,36 @@ function renderAll(){
 ['fMonth','fSeg','fCourse','fTeacher','fType','fColor'].forEach(id=>
   document.getElementById(id).addEventListener('change',renderAll));
 renderAll();
+
+/* ── Global tooltip positioning ── */
+(function(){
+  var activeBox = null;
+  document.addEventListener('mousemove', function(e){
+    if(!activeBox) return;
+    var pad = 14;
+    var bw = activeBox.offsetWidth || 230;
+    var bh = activeBox.offsetHeight || 60;
+    var x = e.clientX + pad;
+    var y = e.clientY + pad;
+    if(x + bw > window.innerWidth - 8) x = e.clientX - bw - pad;
+    if(y + bh > window.innerHeight - 8) y = e.clientY - bh - pad;
+    activeBox.style.left = x + 'px';
+    activeBox.style.top  = y + 'px';
+  });
+  document.addEventListener('mouseover', function(e){
+    var tip = e.target.closest('.th-tip, .under-tip');
+    if(!tip){ activeBox = null; return; }
+    var box = tip.querySelector('.tipbox, .utbox');
+    if(box) activeBox = box;
+  });
+  document.addEventListener('mouseout', function(e){
+    var tip = e.target.closest('.th-tip, .under-tip');
+    if(tip){
+      var rel = e.relatedTarget;
+      if(!rel || !tip.contains(rel)) activeBox = null;
+    }
+  });
+})();
 </script>
 </body>
 </html>
