@@ -62,6 +62,11 @@ tr:hover td{background:rgba(79,142,247,.05)}
   color:var(--text);padding:8px 11px;border-radius:6px;font-size:10px;max-width:260px;
   white-space:normal;line-height:1.55;z-index:9999;box-shadow:0 6px 24px rgba(0,0,0,.6);pointer-events:none}
 .th-tip:hover .tipbox{display:block}
+/* ── SORT ARROWS ── */
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--text)}
+th.sort-asc::after{content:' ▲';font-size:8px;opacity:.85}
+th.sort-desc::after{content:' ▼';font-size:8px;opacity:.85}
 /* ── UNDER TOOLTIP ── */
 .under-tip{position:relative;cursor:help}
 .under-tip .utbox{display:none;position:fixed;background:#2a1a1a;border:1px solid var(--red);
@@ -154,11 +159,7 @@ tr:hover td{background:rgba(79,142,247,.05)}
       </span>
     </h3>
     <div class="tw"><table id="tblTeachers">
-      <thead><tr>
-        <th>ID</th><th>Тип</th><th>Статус</th><th>Місяць</th>
-        <th>Макс год</th><th>План год</th><th>Факт год</th>
-        <th>Утилізація</th><th>$/урок 60хв</th><th>$/міс</th><th>₴/міс</th>
-      </tr></thead>
+      <thead><tr id="tblTeachersHead"></tr></thead>
       <tbody id="tblTeachersBody"></tbody>
     </table></div>
   </div>
@@ -239,7 +240,7 @@ function renderTeachersChart(){
   const tm=fT();
   const labels=tm.map(r=>r.teacher_id+(gTy()==='all'?(r.type==='full-time'?' [FT]':' [PT]'):''));
   const data=tm.map(r=>r.utilization_pct);
-  const bg=tm.map(r=>r.utilization_pct>=95?PA.red:r.utilization_pct>=80?PA.yellow:r.type==='full-time'?PA.b2b:PA.b2c);
+  const bg=tm.map(r=>r.utilization_pct>=95?(r.type==='full-time'?PA.red:PA.red+'88'):r.utilization_pct>=80?(r.type==='full-time'?PA.yellow:PA.yellow+'88'):r.type==='full-time'?PA.b2b:PA.b2c+'88');
   charts['tc']=new Chart(document.getElementById('cTeachers'),{type:'bar',
     data:{labels,datasets:[{label:'%',data,backgroundColor:bg,borderRadius:3}]},
     options:{...BO,plugins:{...BO.plugins,legend:{display:false}},
@@ -315,14 +316,23 @@ const GH=[
   ["Контракт","Тривалість курсу в місяцях.\nФормула: sessions_in_course ÷ sessions_per_month"],
 ];
 
+const sortGrp={col:-1,dir:1};
+const sortTch={col:-1,dir:1};
+const GH_KEYS=['group_id','month','segment','course_type','assigned_teacher','students_count','breakeven_students','lessons_60min_per_month','price_per_lesson_60min_usd','total_rev_usd','teacher_fixed_cost_usd','total_cac_pm_usd','profit_usd','margin_pct','contract_months'];
+const TCH_KEYS=['teacher_id','type','status','month','max_hours_month','planned_hours','actual_hours','utilization_pct','rate_per_lesson_60min_usd','salary_usd_month','salary_uah_month'];
+function sortByCol(arr,keys,col,dir){if(col<0)return arr;return[...arr].sort((a,b)=>{let va=a[keys[col]],vb=b[keys[col]];if(va==null)va='';if(vb==null)vb='';const na=parseFloat(va),nb=parseFloat(vb);if(!isNaN(na)&&!isNaN(nb))return dir*(na-nb);return dir*String(va).localeCompare(String(vb),'uk');});}
 function renderGroupsHead(){
-  document.getElementById('tblGroupsHead').innerHTML=GH.map(([l,t])=>
-    `<th class="th-tip">${l.replace('\n','<br>')}<span class="tipbox">${t.replace(/\n/g,'<br>')}</span></th>`
-  ).join('');
+
+  document.getElementById('tblGroupsHead').innerHTML=GH.map(([l,t],i)=>{
+    const sc=sortGrp.col===i?(sortGrp.dir===1?' sort-asc':' sort-desc'):'';
+    return`<th class="th-tip sortable${sc}" onclick="sortGrpBy(${i})">${l.replace('\n','<br>')}<span class="tipbox">${t.replace(/\n/g,'<br>')}</span></th>`;
+  }).join('');
 }
+function sortGrpBy(i){if(sortGrp.col===i)sortGrp.dir*=-1;else{sortGrp.col=i;sortGrp.dir=1;}renderGroupsTable();renderGroupsHead();}
+
 
 function renderGroupsTable(){
-  const gr=fG();
+  const gr=sortByCol(fG(),GH_KEYS,sortGrp.col,sortGrp.dir);
   const cm={green:'var(--green)',orange:'var(--orange)',red:'var(--red)'};
   document.getElementById('tblGroupsBody').innerHTML=gr.map(r=>{
     const cs=`color:${cm[r.profitability_color]};font-weight:600`;
@@ -346,8 +356,17 @@ function renderGroupsTable(){
 }
 
 /* ── Teachers table ── */
+const TCH_LABELS=[["ID","Ідентифікатор викладача"],["Тип","full-time / part-time"],["Статус","new = новий"],["Місяць","Розрахунковий місяць"],["Макс год","Макс год/міс"],["План год","Планові години"],["Факт год","Фактичні години"],["Утилізація","% завантаженості"],["$/урок 60хв","Ставка за 60хв урок"],["$/міс","Salary USD/міс"],["₴/міс","Salary UAH/міс"]];
+function renderTeachersHead(){
+  document.getElementById('tblTeachersHead').innerHTML=TCH_LABELS.map(([l,t],i)=>{
+    const sc=sortTch.col===i?(sortTch.dir===1?' sort-asc':' sort-desc'):'';
+    return`<th class="th-tip sortable${sc}" onclick="sortTchBy(${i})">${l}<span class="tipbox">${t}</span></th>`;
+  }).join('');
+}
+function sortTchBy(i){if(sortTch.col===i)sortTch.dir*=-1;else{sortTch.col=i;sortTch.dir=1;}renderTeachersTable();}
 function renderTeachersTable(){
-  const tm=fT();
+  renderTeachersHead();
+  const tm=sortByCol(fT(),TCH_KEYS,sortTch.col,sortTch.dir);
   document.getElementById('tblTeachersBody').innerHTML=tm.map(r=>{
     const u=r.utilization_pct;
     const bc=u>=95?'d':u>=80?'w':'';
