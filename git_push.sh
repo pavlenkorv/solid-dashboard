@@ -1,3 +1,16 @@
+#!/usr/bin/env zsh
+set -e
+
+MSG="${1:-Update dashboard data}"
+
 git add .
-git commit -m "Add GitHub Pages auto-deploy"
-git push
+
+if git diff --cached --quiet; then
+  echo "Nothing to commit, working tree clean"
+else
+  git commit -m "$MSG"
+fi
+
+git pull --rebase origin main
+
+git push origin main
