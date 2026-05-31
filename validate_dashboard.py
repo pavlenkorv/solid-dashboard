@@ -1,16 +1,19 @@
-import json, math, sys
+import json, sys
 
 TOL = 0.01
 
 with open("index.html", "r", encoding="utf-8") as f:
     html = f.read()
 
-# Support both old (const D=) and new (const EMBEDDED=) variable names
-marker = "const EMBEDDED="
-start = html.find(marker)
-if start == -1:
-    marker = "const D="
-    start = html.find(marker)
+markers = ["const EMBEDDED =", "const EMBEDDED=", "const D =", "const D="]
+start = -1
+marker = None
+for m in markers:
+    start = html.find(m)
+    if start != -1:
+        marker = m
+        break
+
 if start == -1:
     print("ERROR: cannot find embedded JSON data in index.html")
     sys.exit(1)
@@ -18,6 +21,7 @@ if start == -1:
 blob = html[start + len(marker):].lstrip()
 depth = 0
 end = 0
+
 for i, ch in enumerate(blob):
     if ch == "{":
         depth += 1
@@ -34,7 +38,7 @@ if end == 0:
 data = json.loads(blob[:end])
 
 teacher_rates = {
-    (t["teacher_id"], t["month"]): t["rate_per_lesson_60min_usd"]
+    (t["teacher_id"], t["month"]): float(t["rate_per_lesson_60min_usd"])
     for t in data["teachers"]
 }
 
@@ -47,7 +51,7 @@ for g in data["groups"]:
         errors.append((g["group_id"], "missing teacher rate"))
         continue
 
-    teacher_cost = round(float(rate) * float(g["lessons_60min_per_month"]), 2)
+    teacher_cost = round(rate * float(g["lessons_60min_per_month"]), 2)
     total_cost = round(teacher_cost + float(g["cac_amortized_pm_usd"]), 2)
     profit = round(float(g["total_rev_usd"]) - total_cost, 2)
     margin = round((profit / float(g["total_rev_usd"])) * 100, 1) if float(g["total_rev_usd"]) else 0.0
