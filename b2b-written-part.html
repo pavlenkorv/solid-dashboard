@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Оптимізація B2B процесу навчання — Письмова частина</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --ink-soft: #4a4a6a;
+    --accent: #5b4fcf;
+    --accent-light: #ede9ff;
+    --warn: #e85d36;
+    --warn-light: #fff2ee;
+    --ok: #1e9e6b;
+    --ok-light: #e8faf3;
+    --paper: #fdfcf8;
+    --rule: #e8e4f0;
+    --yellow: #f5c842;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #d4cfe8;
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    padding: 48px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page {
+    background: var(--paper);
+    width: 100%;
+    max-width: 780px;
+    border-radius: 2px;
+    box-shadow: 0 8px 48px rgba(91,79,207,0.18), 0 2px 8px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  .page-header {
+    background: var(--accent);
+    padding: 40px 56px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .doc-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: #fff;
+    line-height: 1.3;
+    font-weight: 700;
+    max-width: 560px;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .meta-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+
+  .page-body {
+    padding: 48px 56px 64px;
+  }
+
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--ink);
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--accent-light);
+  }
+
+  .section p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  .section p strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-light);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .callout p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .warn-callout {
+    border-left: 3px solid var(--warn);
+    background: var(--warn-light);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .warn-callout p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--warn);
+    font-weight: 500;
+  }
+
+  .ok-callout {
+    border-left: 3px solid var(--ok);
+    background: var(--ok-light);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 20px 0;
+  }
+
+  .ok-callout p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ok);
+    font-weight: 500;
+  }
+
+  .approach-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .approach-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .approach-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -1px; left: 20px;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 0 0 6px 6px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .approach-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+
+  .approach-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .time-comparison {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+  }
+
+  .time-box {
+    flex: 1;
+    text-align: center;
+  }
+
+  .time-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .time-box .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .time-box.before .value { color: var(--warn); }
+  .time-box.after .value { color: var(--ok); }
+
+  .time-box .sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  .arrow-box {
+    font-size: 28px;
+    color: var(--rule);
+  }
+
+  .saving-badge {
+    background: var(--ok-light);
+    border: 1px solid var(--ok);
+    color: var(--ok);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 12px;
+  }
+
+  .raci-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+
+  .raci-table th {
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .raci-table th:first-child { border-radius: 8px 0 0 0; }
+  .raci-table th:last-child { border-radius: 0 8px 0 0; }
+
+  .raci-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink-soft);
+    vertical-align: top;
+  }
+
+  .raci-table tr:nth-child(even) td { background: #faf9ff; }
+  .raci-table tr:last-child td:first-child { border-radius: 0 0 0 8px; }
+  .raci-table tr:last-child td:last-child { border-radius: 0 0 8px 0; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .badge-r { background: #fef3c7; color: #b45309; }
+  .badge-a { background: #fee2e2; color: #dc2626; }
+  .badge-c { background: var(--accent-light); color: var(--accent); }
+  .badge-i { background: #f0fdf4; color: #166534; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 40px 0;
+  }
+
+  .footer-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #aaa;
+    text-align: center;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    letter-spacing: 0.05em;
+  }
+
+  .highlight-text {
+    background: linear-gradient(180deg, transparent 60%, var(--yellow) 60%);
+    font-weight: 600;
+    color: var(--ink);
+    padding: 0 2px;
+  }
+
+  @media (max-width: 600px) {
+    .page-header { padding: 32px 24px 28px; }
+    .page-body { padding: 32px 24px 48px; }
+    .approach-grid { grid-template-columns: 1fr; }
+    .time-comparison { flex-direction: column; }
+    .arrow-box { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="page-header">
+    <div class="doc-label">COO · Письмова частина · Завдання B</div>
+    <h1>Оптимізація процесу розробки B2B програм навчання</h1>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Автор</span>
+        <span class="meta-value">Руслан Павленко</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Фокус</span>
+        <span class="meta-value">Масштабованість без CEO</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- SECTION 1 -->
+    <div class="section">
+      <div class="section-num">01 / Питання</div>
+      <h2>Як зробити базову частину програми такою, що розробляється один раз — і легко адаптується під нового клієнта без участі CEO?</h2>
+
+      <p>Ключ — <strong>модульна бібліотека + стандартизований процес кастомізації.</strong></p>
+
+      <p>Базова частина (~70%) розробляється Methodist один раз і зберігається в <span class="highlight-text">Бібліотеці базових модулів</span> (Notion або Google Drive зі структурованим тегуванням: тип ролі, індустрія, рівень складності). Кожен модуль — це не просто слайди, а повний Teaching Kit: сценарій уроку, вправи, критерії оцінювання, FAQ для викладача.</p>
+
+      <div class="callout">
+        <p>📐 Правило: жоден урок не потрапляє в бібліотеку без Teach Kit. Teach Kit = умова публікації.</p>
+      </div>
+
+      <p>Кастомізація (~30%) відбувається за <strong>Кастомізаційною картою</strong> — структурованим документом з 6 полів: індустрія клієнта, ключові ролі, болі команди, заборонені теми, приклади кейсів, бажаний тон. Methodist заповнює карту під час brief-інтерв'ю з клієнтом (День 1–2). Course Creator адаптує матеріали за картою — без залучення CEO.</p>
+
+      <p>Таким чином, <strong>CEO виходить з операційного циклу</strong>. Його роль — лише погодження нового типу програми, якого ще немає в бібліотеці.</p>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SECTION 2 -->
+    <div class="section">
+      <div class="section-num">02 / Питання</div>
+      <h2>Зараз розробка одного уроку — 5 годин. Як скоротити цей час?</h2>
+
+      <p>5 годин на урок — це не проблема швидкості, це <strong>проблема відсутності стандарту.</strong> Розробник щоразу починає з чистого аркуша.</p>
+
+      <div class="time-comparison">
+        <div class="time-box before">
+          <div class="label">Зараз</div>
+          <div class="value">5 год</div>
+          <div class="sub">без шаблону, з нуля</div>
+        </div>
+        <div class="arrow-box">→</div>
+        <div class="time-box after">
+          <div class="label">Ціль</div>
+          <div class="value">2 год</div>
+          <div class="sub">шаблон + AI + бібліотека</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div class="label">Економія</div>
+          <div class="saving-badge">−60% часу · −750 год на 250 уроків</div>
+        </div>
+      </div>
+
+      <p>Три кроки до скорочення:</p>
+
+      <div class="approach-grid">
+        <div class="approach-card" data-num="КРОК 01">
+          <h3>Урочний шаблон (Lesson Template)</h3>
+          <p>Єдина структура: Hook → Контент → Вправа → Рефлексія → Домашнє. Course Creator заповнює, а не конструює. Заощаджує ~1.5 год на урок.</p>
+        </div>
+        <div class="approach-card" data-num="КРОК 02">
+          <h3>AI як чорновик</h3>
+          <p>ChatGPT/Claude генерує перший драфт вправ, прикладів і пояснень. Methodist або Course Creator редагує та погоджує. Заощаджує ~1.5–2 год.</p>
+        </div>
+        <div class="approach-card" data-num="КРОК 03">
+          <h3>Бібліотека готових вправ</h3>
+          <p>Рольові ігри, кейси, мозкові штурми — зберігаються в базі з тегами. Не розробляти нове — брати готове і кастомізувати за 20 хв.</p>
+        </div>
+        <div class="approach-card" data-num="КРОК 04">
+          <h3>Batch-розробка</h3>
+          <p>Розробляти уроки серіями по 5–8 схожої тематики за один раз. Контекстне перемикання — головний вбивця часу.</p>
+        </div>
+      </div>
+
+      <div class="ok-callout">
+        <p>🎯 Ціль: 250 уроків × 2 год = 500 год замість 1250 год. Різниця — 750 год, або ~4.5 місяці роботи одного спеціаліста.</p>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- SECTION 3 -->
+    <div class="section">
+      <div class="section-num">03 / Питання</div>
+      <h2>Як організувати роботу між Methodist, Course Creator і викладачем?</h2>
+
+      <p>Зараз ролі розмиті — і це основна причина затримок і залежності від CEO. Потрібен <strong>чіткий RACI з передачею артефактів</strong>, а не усних домовленостей.</p>
+
+      <table class="raci-table">
+        <thead>
+          <tr>
+            <th>Крок процесу</th>
+            <th>Methodist</th>
+            <th>Course Creator</th>
+            <th>Викладач</th>
+            <th>CEO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Brief-інтерв'ю з клієнтом</td>
+            <td><span class="badge badge-r">R</span></td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="badge badge-i">I</span></td>
+          </tr>
+          <tr>
+            <td>Вибір базового модуля</td>
+            <td><span class="badge badge-r">R</span> <span class="badge badge-a">A</span></td>
+            <td><span class="badge badge-c">C</span></td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Кастомізаційна карта</td>
+            <td><span class="badge badge-r">R</span> <span class="badge badge-a">A</span></td>
+            <td><span class="badge badge-c">C</span></td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Розробка / адаптація уроків</td>
+            <td><span class="badge badge-a">A</span></td>
+            <td><span class="badge badge-r">R</span></td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>QA і погодження</td>
+            <td><span class="badge badge-r">R</span> <span class="badge badge-a">A</span></td>
+            <td><span class="badge badge-c">C</span></td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Передача Teach Kit</td>
+            <td><span class="badge badge-r">R</span></td>
+            <td>—</td>
+            <td><span class="badge badge-i">I</span></td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Онбординг і перший урок</td>
+            <td><span class="badge badge-c">C</span></td>
+            <td>—</td>
+            <td><span class="badge badge-r">R</span> <span class="badge badge-a">A</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:12px;color:#aaa;margin-top:-8px;margin-bottom:20px;">
+        <span class="badge badge-r">R</span> Відповідальний &nbsp;
+        <span class="badge badge-a">A</span> Підзвітний &nbsp;
+        <span class="badge badge-c">C</span> Консультований &nbsp;
+        <span class="badge badge-i">I</span> Інформований
+      </p>
+
+      <p><strong>Принцип передачі артефактів:</strong> кожен крок закінчується не словами, а документом. Brief → Кастомізаційна карта → Програма → Teach Kit → Звіт після першого уроку. Артефакт є — крок зроблений. Немає артефакту — крок не зроблений.</p>
+
+      <div class="warn-callout">
+        <p>⚠️ Найважливіше: Methodist — це не "методист у старому розумінні", а Product Owner програми. Він відповідає за якість і стандарт, а не за кількість годин розробки.</p>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Підготовлено як завдання для COO · Частина 1B · Оптимізація B2B процесу навчання
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
