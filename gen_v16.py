@@ -1,7 +1,7 @@
 """v16 Generator: B2B:B2C=6:1, Apr=499stu 53g, May~544stu 64g"""
 import csv, json, math
 BASE='/Users/parus/Downloads/Project/solid-dashboard'
-UAH=41.5; ACC=19.28; GW=0.018; OP=0.205
+UAH=44.5; ACC=19.28; GW=0.018; OP=0.205
 CHURN={'B2B':0.073,'B2C':0.18}
 TT={
     'T001':('part-time',70,10.50),'T002':('part-time',70,10.80),

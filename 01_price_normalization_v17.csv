@@ -1,0 +1,5 @@
+course_type,segment,session_min,lessons_per_session_60min,sessions_in_course,total_lessons_60min_in_course,course_usd,course_uah,price_per_session_usd,price_per_lesson_60min_usd,price_per_lesson_60min_uah,uah_rate_used,source
+IT Starter,B2C,90,1.5,24,36.0,360.0,15786,15.0,10.0,438.5,43.85,solid.com.ua (verified)
+IT Basic,B2C,90,1.5,30,45.0,678.15,29737,22.605,15.07,660.82,43.85,solid.com.ua (verified)
+Business Starter,B2B,90,1.5,26,39.0,387.66,16999,14.91,9.94,435.87,43.85,solid.com.ua (verified)
+Business C1,B2B,60,1.0,32,32.0,805.44,35319,25.17,25.17,1103.7,43.85,solid.com.ua (verified)

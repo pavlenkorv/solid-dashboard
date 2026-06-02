@@ -1,0 +1,3 @@
+month,active_students,active_students_b2b,active_students_b2c,new_students_b2b,new_students_b2c,total_groups,b2b_groups,b2c_groups,b2b_revenue_usd,b2c_revenue_usd,total_revenue_usd,total_revenue_uah,total_profit_usd,avg_margin_pct,groups_green,groups_orange,groups_red,avg_teacher_utilization_pct,net_profit_v11_usd,net_margin_v11_pct,opex_fixed_usd,payment_gateway_usd
+2025-04,496,425,71,0,0,53,45,8,100250.67,11980.4,112231.07,4921332.42,94136.31,83.88,19,34,0,70.81,70239.17,62.58,0,2020.16
+2025-05,529,438,91,0,0,63,51,12,103170.6,15364.8,118535.4,5197777.29,97367.06,82.14,23,40,0,66.45,72033.54,60.77,0,2133.64
